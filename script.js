@@ -265,27 +265,79 @@ popupStyle.innerHTML = `
 `;
 document.head.appendChild(popupStyle);
 
-
 /* --------------------------------------------------
-   CONTACT FORM LOCAL STORAGE
+   CONTACT FORM: LOCAL STORAGE + FORMSPREE SUBMISSION
 -------------------------------------------------- */
 const nameField = document.getElementById("nameField");
 const emailField = document.getElementById("emailField");
 const msgField = document.getElementById("msgField");
 
+// Restore saved data on page load
 nameField.value = localStorage.getItem("savedName") || "";
 emailField.value = localStorage.getItem("savedEmail") || "";
 msgField.value = localStorage.getItem("savedMsg") || "";
 
-nameField.oninput = () => localStorage.setItem("savedName", nameField.value);
-emailField.oninput = () => localStorage.setItem("savedEmail", emailField.value);
-msgField.oninput = () => localStorage.setItem("savedMsg", msgField.value);
+// Save to localStorage as user types
+nameField.addEventListener("input", () => {
+    localStorage.setItem("savedName", nameField.value);
+});
+emailField.addEventListener("input", () => {
+    localStorage.setItem("savedEmail", emailField.value);
+});
+msgField.addEventListener("input", () => {
+    localStorage.setItem("savedMsg", msgField.value);
+});
 
-document.querySelector("#contactForm").addEventListener("submit", e => {
+// Handle real form submission
+document.getElementById("contactForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    alert("Message received! (Demo)");
-    localStorage.clear();
-    e.target.reset();
+
+    const name = nameField.value.trim();
+    const email = emailField.value.trim();
+    const message = msgField.value.trim();
+
+    // Validation
+    if (!name || !email || !message) {
+        alert("Please fill in all fields.");
+        return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    // Show sending state (optional but nice)
+    const submitBtn = document.querySelector("#contactForm .btn");
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = "Sending...";
+    submitBtn.disabled = true;
+
+    try {
+        const response = await fetch("https://formspree.io/f/xldqvkww", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ name, email, message })
+        });
+
+        if (response.ok) {
+            alert("✅ Message sent successfully! We'll get back to you soon.");
+            localStorage.clear();
+            document.getElementById("contactForm").reset();
+        } else {
+            alert("❌ Failed to send. Please try again later.");
+            console.error("Formspree error:", await response.text());
+        }
+    } catch (err) {
+        alert("⚠️ Network error. Check your internet and try again.");
+        console.error("Network error:", err);
+    } finally {
+        // Restore button
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
 });
 
 
@@ -345,6 +397,132 @@ document.querySelectorAll(".tilt").forEach(card => {
 });
 
 
+// Handle auth UI
+function updateAuthUI() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userGreeting = document.getElementById("user-greeting");
+  const logoutBtn = document.getElementById("logout-btn");
+  const loginLink = document.getElementById("loginLink");
+  const signupLink = document.getElementById("signupLink");
+
+  if (user) {
+    userGreeting.textContent = `Welcome, ${user.name}!`;
+    userGreeting.style.display = "block";
+    logoutBtn.style.display = "block";
+    if (loginLink) loginLink.style.display = "none";
+    if (signupLink) signupLink.style.display = "none";
+  } else {
+    if (loginLink) loginLink.style.display = "block";
+    if (signupLink) signupLink.style.display = "block";
+    userGreeting.style.display = "none";
+    logoutBtn.style.display = "none";
+  }
+}
+
+// Run on load
+document.addEventListener("DOMContentLoaded", updateAuthUI);
+
+// Logout
+document.getElementById("logout-btn")?.addEventListener("click", () => {
+  localStorage.removeItem("user");
+  updateAuthUI();
+  window.location.reload(); // Optional
+});
+
+// Show newsletter popup after 10 seconds
+setTimeout(() => {
+    const popup = document.getElementById("newsletterPopup");
+    if (popup && !localStorage.getItem("newsletterDismissed")) {
+        popup.style.display = "flex";
+    }
+}, 3000); // 3 seconds
+
+// Close popup
+function closeNewsletter() {
+    const popup = document.getElementById("newsletterPopup");
+    if (popup) {
+        popup.style.display = "none";
+        localStorage.setItem("newsletterDismissed", "true"); // Don't show again
+    }
+}
+
+// Handle form submission (optional - send to Formspree)
+document.getElementById("newsletterForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = e.target.querySelector("input").value.trim();
+
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+        alert("Please enter a valid email.");
+        return;
+    }
+
+    try {
+        const response = await fetch("https://formspree.io/f/xldqvkww", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, source: "newsletter-popup" })
+        });
+
+        if (response.ok) {
+            alert("✅ Thanks for subscribing! Check your inbox for our welcome gift.");
+            closeNewsletter();
+        } else {
+            alert("❌ Something went wrong. Please try again.");
+        }
+    } catch (err) {
+        alert("⚠️ Network error. Please try again later.");
+    }
+});
+
+
+// Define your plans
+const plans = [
+    { name: "Starter Plan", price: "$99", color: "#0ef" },
+    { name: "Professional Plan", price: "$199", color: "#0ef" },
+    { name: "Enterprise Plan", price: "$399", color: "#0ef" }
+];
+
+// Sample locations (for realism)
+const locations = ["New York", "London", "Tokyo", "Sydney", "Paris", "Berlin", "Dhaka", "Mumbai", "Singapore", "Toronto"];
+
+function showDemoPopup() {
+    const popup = document.getElementById("demoPopup");
+    if (!popup) return;
+
+    // Pick random plan and location
+    const plan = plans[Math.floor(Math.random() * plans.length)];
+    const location = locations[Math.floor(Math.random() * locations.length)];
+    const minutesAgo = Math.floor(Math.random() * 5) + 1;
+
+    // Update content
+    document.getElementById("popupLocation").textContent = location;
+    document.getElementById("popupPlan").textContent = plan.name;
+    document.getElementById("popupTime").textContent = `${minutesAgo} minute${minutesAgo > 1 ? 's' : ''}`;
+
+    // Optional: Change icon color based on plan (if you want to get fancy)
+    // document.querySelector(".product-icon").style.backgroundColor = plan.color;
+
+    // Show popup
+    popup.style.display = "block";
+
+    // Auto hide after 4 seconds
+    setTimeout(() => {
+        popup.style.display = "none";
+    }, 4000);
+}
+
+function closeDemoPopup() {
+    const popup = document.getElementById("demoPopup");
+    if (popup) popup.style.display = "none";
+}
+
+// Start showing every 5 seconds
+setInterval(showDemoPopup, 5000);
+
+// Show first one after 3 seconds
+setTimeout(showDemoPopup, 3000);
+
+
 /* --------------------------------------------------
    FLOATING PARTICLES BACKGROUND
 -------------------------------------------------- */
@@ -389,3 +567,5 @@ function animateParticles(){
 }
 
 animateParticles();
+
+
