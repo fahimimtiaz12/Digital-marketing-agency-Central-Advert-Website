@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
     <link rel="stylesheet" href="style.css">
+    
 </head>
 
 <body>
@@ -25,29 +26,40 @@
 </div>
 
 <!-- ------------------ HEADER ------------------ -->
+<!-- ------------------ HEADER ------------------ -->
 <header id="header">
-  <div class="header-left">
+  <div class="header-left" style="position:relative;">
+    <canvas id="logoCanvas"></canvas>
     <div class="logo">Central <span>Advert</span></div>
   </div>
-  <nav id="navbar">
+
+  <!-- Main Navigation -->
+  <nav id="navbar" class="nav-menu">
     <a href="#home" class="nav-link active">Home</a>
     <a href="#about" class="nav-link">About</a>
     <a href="#services" class="nav-link">Services</a>
-    <a href="#media" class="nav-link">Media</a>
     <a href="#pricing" class="nav-link">Pricing</a>
-    <a href="#testimonials" class="nav-link">Reviews</a>
-    <a href="#gallery" class="nav-link">Gallery</a>
-    <a href="team.html" class="nav-link">Team</a>
     <a href="#contact" class="nav-link">Contact</a>
-    <a href="canvas.html" class="nav-link">Design Logo</a>
-    <a href="locations.html" class="nav-link">Locations History</a>
-    <a href="login.html" class="nav-link">Login</a>
-    <a href="signup.html" class="nav-link">Sign Up</a>
-
+    <!-- Extra links hidden on mobile by default -->
+    <a href="#media" class="nav-link nav-extra">Media</a>
+    <a href="#testimonials" class="nav-link nav-extra">Reviews</a>
+    <a href="#gallery" class="nav-link nav-extra">Gallery</a>
+    <a href="team.html" class="nav-link nav-extra">Team</a>
+    <a href="canvas.html" class="nav-link nav-extra">Design Logo</a>
+    <a href="locations.html" class="nav-link nav-extra">Locations</a>
   </nav>
+
+  <!-- Auth/User Panel -->
   <div class="header-user">
-    <div id="user-greeting" class="welcome-banner"></div>
-    <button id="logout-btn" class="logout-btn" style="display:none;">Logout</button>
+    <!-- Shown when NOT logged in -->
+    <a href="login.html" class="auth-link" id="loginLink">Login</a>
+    <a href="signup.html" class="auth-link" id="signupLink">Sign Up</a>
+
+    <!-- Shown when logged in -->
+    <div id="user-greeting" class="welcome-banner" style="display: none;"></div>
+    <button id="logout-btn" class="logout-btn" style="display: none;">Logout</button>
+
+    <!-- Theme toggle (always visible) -->
     <button id="themeToggle" class="theme-btn">🌙</button>
   </div>
 </header>
@@ -217,17 +229,17 @@
 
             <div class="swiper-slide testimonial-box">
                 <p>"Amazing agency! They helped us grow fast."</p>
-                <h4>- Ali Khan</h4>
+                <h4>- Khan Md Fahim Imtiaz</h4>
             </div>
 
             <div class="swiper-slide testimonial-box">
                 <p>"Professional and highly creative. Loved working with them!"</p>
-                <h4>- Sarah Ahmed</h4>
+                <h4>- Tanjin Sishir</h4>
             </div>
 
             <div class="swiper-slide testimonial-box">
                 <p>"A complete digital solution for any business."</p>
-                <h4>- Bilal Shah</h4>
+                <h4>- Afida Hossain</h4>
             </div>
             <div class="swiper-slide testimonial-box">
                 <p>"Truly transformed our online presence. Highly recommend!"</p>
@@ -264,6 +276,10 @@
     <h2 class="section-title gradient-text" data-aos="fade-up">Gallery</h2>
 
     <div class="gallery-grid">
+        <img src="media/gallery_boss.jpg" class="tilt">
+        <img src="media/photo_group.jpg" class="tilt">
+        <img src="media/photo_solo.jpg" class="tilt">
+        <img src="media/photo_tour.jpg" class="tilt">
         <img src="media/gallery1.jpg" class="tilt">
         <img src="media/gallery2.jpg" class="tilt">
         <img src="media/gallery3.jpg" class="tilt">
@@ -296,6 +312,38 @@
         Contact: <a href="mailto:fahimimtiaz992@gmail.com" style="color:#0ef;">fahimimtiaz992@gmail.com</a>
     </div>
 </footer>
+
+<!-- NEWSLETTER POPUP -->
+<div id="newsletterPopup" class="newsletter-popup" style="display:none;">
+    <div class="popup-content">
+        <button class="close-btn-small" onclick="closeNewsletter()">×</button>
+        <div class="popup-image">
+            <img src="media/hero2.jpg" alt="Central Advert">
+        </div>
+        <div class="popup-text">
+            <h3>Subscribe to Our Newsletter</h3>
+            <p>Get digital marketing tips, case studies & exclusive offers delivered weekly.</p>
+            <form id="newsletterForm">
+                <input type="email" placeholder="Your Email Address" required>
+                <button type="submit">Subscribe Now →</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Demo Purchase Notification -->
+<div id="demoPopup" class="demo-popup" style="display:none;">
+    <div class="demo-content">
+       <img src="media/plan.jpg" alt="Plan" class="product-icon">
+        <div class="demo-text">
+            <p>Someone in <strong><span id="popupLocation">Dhaka</span></strong> just purchased</p>
+            <h4><span id="popupPlan">Professional Plan</span></h4>
+            <span class="time-ago"><span id="popupTime">2 minutes</span> ago</span>
+        </div>
+        <button class="demo-close" onclick="closeDemoPopup()">×</button>
+    </div>
+</div>
+
 <script>
     // Set current year automatically
     document.getElementById("year").textContent = new Date().getFullYear();
@@ -306,6 +354,7 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="script.js"></script>
+<script src="logo.js"></script>
 
 <script>
   document.addEventListener('contextmenu', event => event.preventDefault());
