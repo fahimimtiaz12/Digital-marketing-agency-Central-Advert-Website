@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Global Offices | Central Advert</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Light / default background */
+    body {
+      background: #ffffff;
+      color: #333;
+      padding-top: calc(1rem + 2rem); /* matches header padding */
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-top: 60px;
+      }
+    }
+
+    #header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      border-bottom: 1.2px solid rgba(0,220,255,0.07);
+      position: fixed;
+      width: 100%;
+      left: 0;
+      top: 0;
+    }
+
+    header.hidden {
+      opacity: 0;
+      transform: translateY(-100%);
+      pointer-events: none;
+    }
+
+    .header-left {
+      position: relative;
+      width: 220px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    #logoCanvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 220px;
+      height: 60px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .header-left .logo {
+      position: absolute;
+      left: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      font-size: 2em;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 1.1px;
+      padding-right: 24px;
+    }
+
+    .header-left .logo span {
+      color: #0ef;
+    }
+
+    /* Back to Home button */
+    .btn-home {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #3498db, #8e44ad);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+    }
+
+    .btn-home:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-home span.icon {
+      font-size: 1.1rem;
+    }
+
+    main.container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 1.5rem 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 1.5rem;
+      font-size: 2.2rem;
+      color: #2c3e50;
+    }
+
+    #map {
+      height: 500px;
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+      border: 1px solid #eef1f5;
+    }
+
+    .offices-list {
+      background: #ffffff;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      border: 1px solid #eef1f5;
+    }
+
+    .filters {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .filters label {
+      font-weight: 600;
+    }
+
+    .filters select {
+      padding: 0.4rem 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #fdfdfd;
+    }
+
+    .office-card {
+      display: flex;
+      padding: 1.2rem 0.3rem;
+      border-bottom: 1px solid #eee;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .office-card:last-child {
+      border-bottom: none;
+    }
+
+    .office-info {
+      flex: 1;
+    }
+
+    .office-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      color: #2980b9;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .head-office-badge {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      background: #ffeaa7;
+      color: #d35400;
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .office-detail {
+      margin: 0.25rem 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .btn-directions {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      display: inline-block;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 10px rgba(231,76,60,0.4);
+      white-space: nowrap;
+    }
+
+    .btn-directions:hover {
+      background: #c0392b;
+    }
+
+    @media (max-width: 768px) {
+      .office-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .btn-directions {
+        margin-top: 0.75rem;
+      }
+    }
+
+    /* === DARK MODE STYLES === */
+    body.dark-mode {
+      background: #121212;
+      color: #f0f0f0;
+    }
+
+    body.dark-mode #header {
+      background: #1e1e1e;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    body.dark-mode .logo span {
+      color: #4fc3f7;
+    }
+
+    body.dark-mode .offices-list {
+      background: #1e1e1e;
+      border-color: #2b2b2b;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+
+    body.dark-mode #map {
+      border-color: #2b2b2b;
+    }
+
+    body.dark-mode .office-name {
+      color: #64b5f6;
+    }
+
+    body.dark-mode .btn-directions {
+      background: #f44336;
+    }
+
+    body.dark-mode .btn-directions:hover {
+      background: #d32f2f;
+    }
+
+    /* Theme toggle button */
+    .theme-btn {
+      margin-left: 0.75rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 50%;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      background: #f1f1f1;
+    }
+
+    body.dark-mode .theme-btn {
+      background: #2c2c2c;
+      color: #ffeb3b;
+    }
+
+    /* === Welcome character modal === */
+    .welcome-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .welcome-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .welcome-modal {
+      background: #ffffff;
+      border-radius: 18px;
+      max-width: 420px;
+      width: 90%;
+      padding: 1.5rem 1.6rem 1.3rem;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+      position: relative;
+      overflow: hidden;
+      transform: translateY(30px) scale(0.96);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .welcome-overlay.active .welcome-modal {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    /* Animated character */
+    .welcome-character {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 0.4rem;
+    }
+
+    .character-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+      position: relative;
+      animation: floatAvatar 3s ease-in-out infinite;
+    }
+
+    .character-face {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #ffffff;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .character-eyes {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 60%;
+      margin-bottom: 4px;
+    }
+
+    .eye {
+      width: 7px;
+      height: 10px;
+      border-radius: 999px;
+      background: #34495e;
+      animation: blink 4s infinite;
+    }
+
+    .character-mouth {
+      width: 18px;
+      height: 8px;
+      border-radius: 0 0 18px 18px;
+      border-bottom: 3px solid #2ecc71;
+    }
+
+    .character-body {
+      position: absolute;
+      bottom: -10px;
+      width: 40px;
+      height: 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.85);
+    }
+
+    @keyframes floatAvatar {
+      0%, 100% { transform: translateY(0); box-shadow: 0 12px 28px rgba(0,0,0,0.18); }
+      50% { transform: translateY(-6px); box-shadow: 0 20px 35px rgba(0,0,0,0.22); }
+    }
+
+    @keyframes blink {
+      0%, 8%, 100% { transform: scaleY(1); }
+      4% { transform: scaleY(0.15); }
+    }
+
+    .welcome-title {
+      margin-top: 0.6rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    .welcome-text {
+      margin-top: 0.4rem;
+      font-size: 0.98rem;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .welcome-actions {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.6rem;
+    }
+
+    .welcome-btn-primary,
+    .welcome-btn-ghost {
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .welcome-btn-primary {
+      background: linear-gradient(135deg, #3498db, #2ecc71);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(52,152,219,0.45);
+    }
+
+    .welcome-btn-ghost {
+      background: transparent;
+      border: 1px solid #dcdcdc;
+      color: #555;
+    }
+
+    .welcome-close {
+      position: absolute;
+      top: 0.55rem;
+      right: 0.7rem;
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    .welcome-close:hover {
+      opacity: 1;
+    }
+
+    body.dark-mode .welcome-modal {
+      background: #1f1f1f;
+      color: #f0f0f0;
+    }
+
+    body.dark-mode .welcome-title {
+      color: #f5f5f5;
+    }
+
+    body.dark-mode .welcome-text {
+      color: #cccccc;
+    }
+
+    body.dark-mode .welcome-btn-ghost {
+      border-color: #444;
+      color: #eee;
+    }
+
+    body.dark-mode .character-avatar {
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+
+    body.dark-mode .character-face {
+      background: #1e1e1e;
+    }
+
+    body.dark-mode .eye {
+      background: #ecf0f1;
+    }
+  </style>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-left">
+    <canvas id="logoCanvas"></canvas>
+    <div class="logo">Central <span>Advert</span></div>
+  </div>
+
+  <div class="header-right">
+    <a href="index.html" class="btn-home">
+      <span class="icon">🏠</span>
+      <span>Back to Home</span>
+    </a>
+    <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Our Global Offices</h1>
+
+  <div id="map"></div>
+
+  <div class="offices-list">
+    <div class="filters">
+      <label for="region-filter">Filter by Region:</label>
+      <select id="region-filter">
+        <option value="all">All Regions</option>
+        <option value="Asia">Asia</option>
+        <option value="South Asia">South Asia</option>
+        <option value="North America">North America</option>
+        <option value="Europe">Europe</option>
+      </select>
+    </div>
+
+    <div id="offices-cards"></div>
+  </div>
+</main>
+
+<!-- Welcome character modal -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-modal">
+    <button class="welcome-close" id="welcomeClose" aria-label="Close welcome">✕</button>
+
+    <div class="welcome-character">
+      <div class="character-avatar">
+        <div class="character-face">
+          <div class="character-eyes">
+            <span class="eye left-eye"></span>
+            <span class="eye right-eye"></span>
+          </div>
+          <div class="character-mouth"></div>
+        </div>
+        <div class="character-body"></div>
+      </div>
+    </div>
+
+    <div class="welcome-title">Hey, welcome to our offices!</div>
+    <div class="welcome-text">
+      Explore our global office locations on the map, tap on a city for details, and visit us to get expert advertising suggestions tailored just for your brand.
+    </div>
+    <div class="welcome-text" style="margin-top: 0.6rem; font-weight: 600; color: #2c3e50;">
+      CEO &amp; Founder: Fahim Imtiaz Khan
+    </div>
+
+    <div class="welcome-actions">
+      <button class="welcome-btn-ghost" id="welcomeLater">Maybe later</button>
+      <button class="welcome-btn-primary" id="welcomeExplore">Show me the offices</button>
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  // Custom icon for Head Office (Bangladesh)
+  const headOfficeIcon = L.divIcon({
+    className: 'head-office-marker',
+    html: '<div style="background:#3498db;width:32px;height:32px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:16px;">H</div>',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+  });
+
+  const regularIcon = L.Icon.Default;
+
+  const offices = [
+    {
+      name: "Dhaka Head Office",
+      region: "South Asia",
+      lat: 23.8103,
+      lng: 90.4125,
+      address: "Plot 45, Gulshan Avenue, Dhaka 1212, Bangladesh",
+      phone: "+880 2 1234 5678",
+      email: "hq@centraladvert.com",
+      hours: "Sun–Thu: 9AM–6PM",
+      isHeadOffice: true
+    },
+    {
+      name: "Mumbai Office",
+      region: "South Asia",
+      lat: 19.0760,
+      lng: 72.8777,
+      address: "Andheri East, MIDC, Mumbai 400093, India",
+      phone: "+91 22 4567 8901",
+      email: "mumbai@centraladvert.com",
+      hours: "Mon–Fri: 9:30AM–6:30PM IST",
+      isHeadOffice: false
+    },
+    {
+      name: "Lahore Office",
+      region: "South Asia",
+      lat: 31.5204,
+      lng: 74.3587,
+      address: "DHA Phase V, Lahore 54890, Pakistan",
+      phone: "+92 42 3577 1234",
+      email: "lahore@centraladvert.com",
+      hours: "Mon–Fri: 9AM–5PM PKT",
+      isHeadOffice: false
+    },
+    {
+      name: "Hong Kong HQ",
+      region: "Asia",
+      lat: 22.3193,
+      lng: 114.1694,
+      address: "123 Central Boulevard, Central, Hong Kong",
+      phone: "+852 1234 5678",
+      email: "hk@centraladvert.com",
+      hours: "Mon–Fri: 9AM–6PM"
+    },
+    {
+      name: "Singapore Office",
+      region: "Asia",
+      lat: 1.3521,
+      lng: 103.8198,
+      address: "10 Raffles Place, Singapore 048619",
+      phone: "+65 6123 4567",
+      email: "sg@centraladvert.com",
+      hours: "Mon–Fri: 8:30AM–5:30PM"
+    },
+    {
+      name: "New York Office",
+      region: "North America",
+      lat: 40.7128,
+      lng: -74.0060,
+      address: "456 Madison Ave, New York, NY 10022, USA",
+      phone: "+1 212 555 0198",
+      email: "ny@centraladvert.com",
+      hours: "Mon–Fri: 9AM–5PM EST"
+    },
+    {
+      name: "London Office",
+      region: "Europe",
+      lat: 51.5074,
+      lng: -0.1278,
+      address: "789 Oxford Street, London W1D 1BS, UK",
+      phone: "+44 20 7946 0958",
+      email: "london@centraladvert.com",
+      hours: "Mon–Fri: 9AM–5:30PM GMT"
+    }
+  ];
+
+  // Initialize Map
+  const map = L.map('map').setView([20, 20], 2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  const cardsContainer = document.getElementById('offices-cards');
+
+  offices.forEach(office => {
+    const icon = office.isHeadOffice ? headOfficeIcon : new regularIcon();
+    const marker = L.marker([office.lat, office.lng], { icon }).addTo(map);
+
+    const popupContent = `
+      <b>${office.name}${office.isHeadOffice ? ' ⭐' : ''}</b><br/>
+      ${office.address}<br/>
+      📞 ${office.phone}<br/>
+      ✉️ ${office.email}<br/>
+      🕒 ${office.hours}
+    `;
+    marker.bindPopup(popupContent);
+
+    const card = document.createElement('div');
+    card.className = 'office-card';
+    card.dataset.region = office.region;
+
+    const nameDisplay = office.isHeadOffice
+      ? `${office.name} <span class="head-office-badge">Head Office</span>`
+      : office.name;
+
+    card.innerHTML = `
+      <div class="office-info">
+        <div class="office-name">${nameDisplay}</div>
+        <div class="office-detail">📍 ${office.address}</div>
+        <div class="office-detail">📞 ${office.phone}</div>
+        <div class="office-detail">✉️ ${office.email}</div>
+        <div class="office-detail">🕒 ${office.hours}</div>
+      </div>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=${office.lat},${office.lng}&travelmode=driving"
+         target="_blank" class="btn-directions">
+        Visit Our Office
+      </a>
+    `;
+    cardsContainer.appendChild(card);
+  });
+
+  // Filter logic
+  document.getElementById('region-filter').addEventListener('change', (e) => {
+    const region = e.target.value;
+    const cards = document.querySelectorAll('.office-card');
+    cards.forEach(card => {
+      card.style.display = (region === 'all' || card.dataset.region === region) ? 'flex' : 'none';
+    });
+  });
+
+  // Hide header on scroll
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('header');
+    if (window.scrollY > 50) {
+      header.classList.add('hidden');
+    } else {
+      header.classList.remove('hidden');
+    }
+  });
+
+  // DARK/LIGHT MODE TOGGLE
+ const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+
+// Use a different key just for the offices page
+const savedOfficeTheme = localStorage.getItem('officeTheme');
+if (savedOfficeTheme === 'dark') {
+  body.classList.add('dark-mode');
+  themeToggle.textContent = '☀️';
+} else {
+  // default for offices page is light mode
+  body.classList.remove('dark-mode');
+  themeToggle.textContent = '🌙';
+}
+
+themeToggle.addEventListener('click', () => {
+  if (body.classList.contains('dark-mode')) {
+    body.classList.remove('dark-mode');
+    themeToggle.textContent = '🌙';
+    localStorage.setItem('officeTheme', 'light');
+  } else {
+    body.classList.add('dark-mode');
+    themeToggle.textContent = '☀️';
+    localStorage.setItem('officeTheme', 'dark');
+  }
+});
+
+
+  // WELCOME CHARACTER MODAL
+  const welcomeOverlay = document.getElementById('welcomeOverlay');
+  const welcomeClose = document.getElementById('welcomeClose');
+  const welcomeLater = document.getElementById('welcomeLater');
+  const welcomeExplore = document.getElementById('welcomeExplore');
+
+  const hideWelcome = () => {
+    welcomeOverlay.classList.remove('active');
+  };
+
+  // Always show welcome on every page load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      welcomeOverlay.classList.add('active');
+    }, 500);
+  });
+
+  welcomeClose.addEventListener('click', hideWelcome);
+  welcomeLater.addEventListener('click', hideWelcome);
+  welcomeExplore.addEventListener('click', () => {
+    hideWelcome();
+    document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

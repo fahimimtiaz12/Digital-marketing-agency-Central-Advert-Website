@@ -24,9 +24,10 @@
       100% {background-position: 0% 50%;}
     }
     .auth-card {
+       position: relative;
       background: rgba(60,40,65,0.85);
       border-radius: 22px;
-      box-shadow: 0 9px 34px #a0cfff8, 0 2px 8px #e5a9fa2, 0 0 0 2px #fff2 inset;
+      box-shadow: 0 9px 34px #a0cfff, 0 2px 8px #e5a9fa, 0 0 0 2px #fff2 inset;
       backdrop-filter: blur(14px) saturate(1.2);
       padding: 48px 38px 30px 38px;
       max-width: 370px;
@@ -45,7 +46,7 @@
       letter-spacing: 1.4px;
       margin-bottom: 20px;
       background: linear-gradient(90deg, #e5a9fa, #4cf, #a0cfff);
-      background-clip: text;-webkit-background-clip: text;
+      background-clip: text; -webkit-background-clip: text;
       color: transparent;
       -webkit-text-fill-color: transparent;
       animation: glowText 2.4s infinite alternate;
@@ -76,7 +77,7 @@
       outline: none;
     }
     .input-group input:focus {
-      box-shadow: 0 0 14px #e5a9fa8, 0 1.5px 10px #fff2;
+      box-shadow: 0 0 14px #e5a9fa, 0 1.5px 10px #fff2;
       background: rgba(40,30,54,0.87);
     }
     .auth-btn {
@@ -92,7 +93,7 @@
       cursor: pointer;
       margin-bottom: 8px;
       margin-top: 5px;
-      box-shadow: 0 3px 11px #e5a9fa7;
+      box-shadow: 0 3px 11px #e5a9fa;
       transition: background 0.25s, color 0.25s;
       animation: fadeInBounce 1.7s cubic-bezier(.45,1.8,.51,.86) backwards;
     }
@@ -127,12 +128,34 @@
       .auth-card {padding: 20px 8vw;}
       .input-group label {font-size: 0.94em;}
     }
+    .password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 40px;
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  font-size: 1em;
+}
+
   </style>
 </head>
 <body>
   <div class="auth-card">
+    <canvas id="logoCanvas" width="180" height="50" style="position:absolute; top:20px; left:20px; border-radius:8px; opacity:0.92;"></canvas>
+
     <h2>Sign Up</h2>
-    <form>
+    <form id="signupForm">
       <div class="input-group">
         <label for="newuser">Username</label>
         <input type="text" id="newuser" autocomplete="username" required>
@@ -142,28 +165,171 @@
         <input type="email" id="newemail" autocomplete="email" required>
       </div>
       <div class="input-group">
-        <label for="newpass">Password</label>
-        <input type="password" id="newpass" autocomplete="new-password" required>
-      </div>
-      <div class="input-group">
-        <label for="newpass2">Confirm Password</label>
-        <input type="password" id="newpass2" autocomplete="new-password" required>
-      </div>
+  <label for="newpass">Password</label>
+  <div class="password-wrapper">
+    <input type="password" id="newpass" autocomplete="new-password" required>
+    <button type="button" class="toggle-pass" data-target="newpass">👁️</button>
+  </div>
+</div>
+
+<div class="input-group">
+  <label for="newpass2">Confirm Password</label>
+  <div class="password-wrapper">
+    <input type="password" id="newpass2" autocomplete="new-password" required>
+    <button type="button" class="toggle-pass" data-target="newpass2">👁️</button>
+  </div>
+</div>
+
       <button type="submit" class="auth-btn">Create Account</button>
+      <p id="signupError" style="color:#ff8b8b; font-size:0.9em; margin-top:6px;"></p>
       <div class="auth-links">
         <a href="login.html">Already have an account?</a>
       </div>
     </form>
   </div>
 
-  <!-- Place script HERE! -->
   <script>
-    document.querySelector("form").addEventListener("submit", function(e) {
-      e.preventDefault(); // Prevent actual form submission
-      const username = document.getElementById("newuser").value;
-      localStorage.setItem("currentUser", username);
-      window.location.href = "index.html";
+  // Draw Central Advert logo on canvas
+  window.addEventListener('load', function() {
+    const canvas = document.getElementById('logoCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const gradient = ctx.createLinearGradient(0, 0, 180, 0);
+    gradient.addColorStop(0, '#0ef');
+    gradient.addColorStop(0.5, '#a0cfff');
+    gradient.addColorStop(1, '#4cf');
+
+    ctx.shadowColor = '#0ef';
+    ctx.shadowBlur = 12;
+
+    ctx.fillStyle = gradient;
+    ctx.font = 'bold 22px Poppins, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Central', 8, 25);
+
+    ctx.shadowBlur = 18;
+    ctx.font = 'bold 20px Poppins, sans-serif';
+    ctx.fillText('Advert', 8, 42);
+
+    ctx.shadowBlur = 6;
+    ctx.strokeStyle = 'rgba(14, 238, 255, 0.4)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(8, 46);
+    ctx.lineTo(160, 46);
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
+  });
+</script>
+
+
+  <!-- Firebase sign-up logic -->
+ <script type="module">
+  // Firebase imports
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+  // Your Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyB-nX2AYq3awQKX86OynEkgmofL6wNJEJ4",
+    authDomain: "central-advert.firebaseapp.com",
+    projectId: "central-advert",
+    storageBucket: "central-advert.firebasestorage.app",
+    messagingSenderId: "876770335760",
+    appId: "1:876770335760:web:fb87b8c0db3b5af8793e95",
+    measurementId: "G-07J778SEF9"
+  };
+
+  // Initialize Firebase, Auth, Firestore
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  // Form elements
+  const form        = document.getElementById('signupForm');
+  const usernameInp = document.getElementById('newuser');
+  const emailInp    = document.getElementById('newemail');
+  const passInp     = document.getElementById('newpass');
+  const pass2Inp    = document.getElementById('newpass2');
+  const errorP      = document.getElementById('signupError');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorP.textContent = '';
+
+    const username = usernameInp.value.trim();
+    const email    = emailInp.value.trim();
+    const pass1    = passInp.value;
+    const pass2    = pass2Inp.value;
+
+    if (!username) {
+      errorP.textContent = 'Username is required.';
+      return;
+    }
+    if (pass1 !== pass2) {
+      errorP.textContent = 'Passwords do not match.';
+      return;
+    }
+
+    try {
+      // 1) Create user in Firebase Authentication
+      const cred = await createUserWithEmailAndPassword(auth, email, pass1);
+      const user = cred.user;
+
+      // 2) Save username → email mapping in Firestore
+      // Collection "usernames", doc id = username in lowercase
+      // username -> email
+     await setDoc(doc(db, "usernames", username.toLowerCase()), {
+        username: username,
+        email: email,
+       uid: user.uid
+      });
+
+     // uid -> username
+     await setDoc(doc(db, "userByUid", user.uid), {
+      username: username,
+      email: email
     });
-  </script>
+
+
+      // 3) Optional: remember username locally
+      localStorage.setItem('currentUser', username);
+
+      alert('Account created! You can log in with email OR username.');
+      window.location.href = 'login.html';
+    } catch (err) {
+      errorP.textContent = err.message;
+    }
+  });
+    // Show / hide password buttons
+  document.querySelectorAll('.toggle-pass').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const input = document.getElementById(targetId);
+      if (!input) return;
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
+      }
+    });
+  });
+
+</script>
+
 </body>
 </html>
