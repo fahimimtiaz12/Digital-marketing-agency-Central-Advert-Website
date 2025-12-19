@@ -179,3 +179,31 @@ window.addEventListener("resize", () => {
     canvas.height = window.innerHeight;
 });
 
+
+/* --------------------------------------------------
+   HIDE HEADER ON SCROLL
+-------------------------------------------------- */
+let lastScrollY = window.scrollY;
+const header = document.getElementById('header');
+
+window.addEventListener('scroll', () => {
+  const currentY = window.scrollY;
+
+  // Always show when at the very top
+  if (currentY <= 0) {
+    header.classList.remove('header-hidden');
+    lastScrollY = currentY;
+    return;
+  }
+
+  if (currentY > lastScrollY) {
+    // Scrolling down → hide
+    header.classList.add('header-hidden');
+  } else {
+    // Scrolling up → show
+    header.classList.remove('header-hidden');
+  }
+
+  lastScrollY = currentY;
+});
+
