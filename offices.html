@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Global Offices | Central Advert</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <link rel="stylesheet" href="office.css" />
+  <script type="module" src="office.js"></script>
+  
+</head>
+<body>
+
+<header id="header">
+  <div class="header-left">
+    <canvas id="logoCanvas"></canvas>
+    <div class="logo">Central <span>Advert</span></div>
+  </div>
+
+  <div class="header-right">
+    <a href="index.html" class="btn-home">
+      <span class="icon">🏠</span>
+      <span>Back to Home</span>
+    </a>
+    <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Our Global Offices</h1>
+
+  <div id="map"></div>
+
+  <div class="offices-list">
+    <div class="filters">
+      <label for="region-filter">Filter by Region:</label>
+      <select id="region-filter">
+        <option value="all">All Regions</option>
+        <option value="Asia">Asia</option>
+        <option value="South Asia">South Asia</option>
+        <option value="North America">North America</option>
+        <option value="Europe">Europe</option>
+      </select>
+    </div>
+
+    <div id="offices-cards"></div>
+  </div>
+</main>
+
+<!-- Welcome character modal -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-modal">
+    <button class="welcome-close" id="welcomeClose" aria-label="Close welcome">✕</button>
+
+    <div class="welcome-character">
+      <div class="character-avatar">
+        <div class="character-face">
+          <div class="character-eyes">
+            <span class="eye left-eye"></span>
+            <span class="eye right-eye"></span>
+          </div>
+          <div class="character-mouth"></div>
+        </div>
+        <div class="character-body"></div>
+      </div>
+    </div>
+
+    <div class="welcome-title">Hey, welcome to our offices!</div>
+    <div class="welcome-text">
+      Explore our global office locations on the map, tap on a city for details, and visit us to get expert advertising suggestions tailored just for your brand.
+    </div>
+    <div class="welcome-text" style="margin-top: 0.6rem; font-weight: 600; color: #2c3e50;">
+      CEO &amp; Founder: Fahim Imtiaz Khan
+    </div>
+
+    <div class="welcome-actions">
+      <button class="welcome-btn-ghost" id="welcomeLater">Maybe later</button>
+      <button class="welcome-btn-primary" id="welcomeExplore">Show me the offices</button>
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
+</html>

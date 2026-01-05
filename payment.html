@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment | Central Advert</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="payment.css">
+</head>
+<body>
+  <div class="particles"></div>
+  <a href="index.html" class="top-home-btn">← Back to Homepage</a>
+
+  <div class="logo-wrapper">
+    <canvas id="logoCanvas" width="180" height="50"></canvas>
+  </div>
+
+  <!-- Zoom controls -->
+  <div class="zoom-controls">
+    <div class="zoom-btn">
+      <button id="zoom-out">−</button>
+      <span>Zoom out</span>
+    </div>
+    <div class="zoom-btn">
+      <button id="zoom-in">+</button>
+      <span>Zoom in</span>
+    </div>
+  </div>
+
+  <!-- Wrap main content so we can scale it -->
+  <div id="zoom-wrapper" class="zoom-target">
+    <div class="payment-container">
+      <div class="summary">
+        <h2>Selected Plan</h2>
+        <p id="plan-type">Professional</p>
+        <div class="price" id="plan-price">$199</div>
+        <p>Full SEO Setup<br>10 Social Posts<br>Ad Campaign & Support</p>
+      </div>
+
+      <form class="payment-form" id="payment-form" onsubmit="return submitDemo(event)">
+        <div class="card-icons" id="card-icons">
+          <img src="https://img.icons8.com/color/48/000000/visa.png" id="icon-visa" alt="Visa" data-brand="Visa" title="Visa">
+          <img src="https://img.icons8.com/color/48/000000/mastercard.png" id="icon-mastercard" alt="MasterCard" data-brand="MasterCard" title="MasterCard">
+          <img src="https://img.icons8.com/color/48/000000/amex.png" id="icon-amex" alt="American Express" data-brand="Amex" title="Amex">
+          <img src="https://img.icons8.com/color/48/000000/discover.png" id="icon-discover" alt="Discover" data-brand="Discover" title="Discover">
+        </div>
+
+        <div class="error-message" id="card-error">Please select a card type!</div>
+
+        <input class="input" type="text" placeholder="Cardholder Name" id="cardholderName" required>
+        <input class="input card-number" type="text" placeholder="Card Number" maxlength="19" id="cardNumber" required>
+        <input class="input" type="text" placeholder="MM/YY" maxlength="5" id="cardExpiry" required>
+        <input class="input" type="text" placeholder="CVV" maxlength="4" id="cardCvv" required>
+
+        <div class="extra-fields" id="extra-visa">
+          <span class="extra-label">Visa Issuing Bank</span>
+          <input type="text" class="input" placeholder="Bank Name">
+        </div>
+        <div class="extra-fields" id="extra-mastercard">
+          <span class="extra-label">MasterCard Billing Address</span>
+          <input type="text" class="input" placeholder="Billing Address">
+          <label><input type="checkbox"> 3D Secure Verified</label>
+        </div>
+        <div class="extra-fields" id="extra-amex">
+          <span class="extra-label">Amex Secure PIN</span>
+          <input type="password" class="input" placeholder="4-digit PIN" maxlength="4">
+        </div>
+        <div class="extra-fields" id="extra-discover">
+          <span class="extra-label">Discover ID Number</span>
+          <input type="text" class="input" placeholder="Customer ID" maxlength="8">
+        </div>
+
+        <div class="coupon-section">
+          <label for="couponCode" class="coupon-label">Coupon Code:</label>
+          <div class="coupon-row">
+            <input type="text" id="couponCode" class="input coupon-input">
+            <button type="button" class="pay-btn coupon-btn" id="applyCouponBtn">Apply</button>
+          </div>
+          <div id="couponMsg"></div>
+          <div style="margin-top:7px; color:#ccc;">
+            Try: <span style="color:#0ef;">WELCOME10</span> (10% off),
+            <span style="color:#0ef;">SAVE20</span> (20% off)
+          </div>
+        </div>
+
+        <button class="pay-btn" type="submit">Pay Now (Demo)</button>
+      </form>
+    </div>
+
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <span class="checkmark">&#10003;</span>
+        <h2 style="margin-bottom:10px;">Payment Complete!</h2>
+        <p style="font-size:1.08em;opacity:0.85;">
+          This is a demo — no actual payment was processed.
+        </p>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+    </div>
+
+    <!-- Cute receipt overlay -->
+    <div id="receipt-overlay" class="receipt-overlay" style="display:none;">
+      <div id="receipt-card" class="receipt-card">
+        <div class="receipt-ribbon">✨ Payment Receipt ✨</div>
+        <div class="receipt-header">
+          <div class="receipt-store">Central Advert</div>
+          <div class="receipt-id" id="r-id">Order #NP-000000</div>
+        </div>
+
+        <div class="receipt-body">
+          <p class="receipt-thanks">Thank you for your purchase! 💖</p>
+          <div class="receipt-row">
+            <span>Plan</span>
+            <span id="r-plan-name">Kawaii Pro</span>
+          </div>
+          <div class="receipt-row">
+            <span>Price</span>
+            <span id="r-plan-price">$0.00</span>
+          </div>
+          <div class="receipt-row">
+            <span>Date</span>
+            <span id="r-date"></span>
+          </div>
+          <div class="receipt-row">
+            <span>Buyer</span>
+            <span id="r-buyer">Guest</span>
+          </div>
+        </div>
+
+        <div class="receipt-footer">
+          <p class="receipt-note">
+            Keep this receipt for your records. Stay sparkly! ✨
+          </p>
+          <div class="receipt-actions">
+            <button id="btn-receipt-pdf" class="receipt-btn primary">Download PDF</button>
+            <button id="btn-receipt-img" class="receipt-btn ghost">Download PNG</button>
+            <button id="btn-receipt-jpg" class="receipt-btn ghost">Download JPG</button>
+            <button id="btn-receipt-home" class="receipt-btn text">Go to homepage</button>
+          </div>
+          <p class="receipt-auto">
+            You can close this after saving your receipt.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div> <!-- end #zoom-wrapper -->
+
+  <!-- Libraries for PDF / image export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="payment.js"></script>
+
+  <!-- Elfsight Countdown Timer | Untitled Countdown Timer -->
+  <script src="https://elfsightcdn.com/platform.js" async></script>
+  <div class="elfsight-app-f64bfd76-5a62-4817-b399-11a4adf06d62" data-elfsight-app-lazy></div>
+</body>
+</html>

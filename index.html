@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Advert - Digital Marketing Agency</title>
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Swiper Slider -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+    <link rel="stylesheet" href="style.css">
+    <!-- <style>
+  /* Example: increase chat bubble size */
+  .ts-launcher, .ts-launcher button {
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  .ts-launcher svg, .ts-launcher img {
+    width: 32px !important;
+    height: 32px !important;
+  }
+</style> -->
+
+    
+</head>
+
+<body>
+
+<!-- ------------------ SCROLL PROGRESS BAR ------------------ -->
+<div id="scrollProgress"></div>
+
+<!-- ------------------ PRELOADER ------------------ -->
+<div id="preloader">
+    <div class="loader"></div>
+</div>
+
+<!-- ------------------ HEADER ------------------ -->
+<header id="header">
+  <div class="header-left" style="position:relative;">
+    <canvas id="logoCanvas"></canvas>
+    <div class="logo">Central <span>Advert</span></div>
+  </div>
+
+  <!-- Main Navigation -->
+  <nav id="navbar" class="nav-menu">
+    <a href="#home" class="nav-link active">Home</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#services" class="nav-link">Services</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="#contact" class="nav-link">Contact</a>
+    <a href="#media" class="nav-link nav-extra">Media</a>
+    <a href="#testimonials" class="nav-link nav-extra">Reviews</a>
+    <a href="#gallery" class="nav-link nav-extra">Gallery</a>
+    <a href="team.html" class="nav-link nav-extra">Team</a>
+    <a href="canvas.html" class="nav-link nav-extra">Design Logo</a>
+    <a href="locations.html" class="nav-link nav-extra">Locations History</a>
+     <a href="offices.html" class="nav-link nav-extra">Our offices</a>
+  </nav>
+
+  <!-- Auth/User Panel -->
+  <div class="header-user">
+    <!-- Shown when NOT logged in -->
+    <a href="login.html" class="auth-link" id="loginLink">Login</a>
+    <a href="signup.html" class="auth-link" id="signupLink">Sign Up</a>
+
+    <!-- Shown when logged in -->
+    <div id="user-greeting" class="welcome-banner" style="display: none;"></div>
+    <button id="logout-btn" class="logout-btn" style="display: none;">Logout</button>
+
+    <!-- Theme toggle (always visible) -->
+    <button id="themeToggle" class="theme-btn">🌙</button>
+  </div>
+</header>
+
+<!-- ------------------ PARTICLE CANVAS ------------------ -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- ------------------ HERO ------------------ -->
+<section id="home" class="hero">
+    <div class="hero-content">
+
+        <!-- FIXED TYPEWRITER TITLE (stable spacing) -->
+        <h1 class="typewriter gradient-text"></h1>
+
+        <!-- FIXED PARAGRAPH (no overlap, proper spacing) -->
+        <p class="hero-subtext" data-aos="fade-right">
+            World's #1 Digital Marketing Agency.
+        </p>
+
+        <!-- FIXED BUTTON POSITION -->
+        <a href="#services" class="btn glow" data-aos="fade-up">
+            Explore Services
+        </a>
+
+        <!-- COUNTERS -->
+        <div class="counters" data-aos="fade-up">
+            <div class="counter-box">
+                <div class="counter" data-target="550">0</div>
+                <p>Projects</p>
+            </div>
+            <div class="counter-box">
+                <div class="counter" data-target="700">0</div>
+                <p>Clients</p>
+            </div>
+            <div class="counter-box">
+                <div class="counter" data-target="123">0</div>
+                <p>Brands Built</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="hero-img" data-aos="zoom-in">
+        <img src="media/hero2.jpg" alt="Digital Marketing Agency">
+    </div>
+</section>
+
+
+
+<!-- ------------------ ABOUT ------------------ -->
+
+<section id="about" class="section dark" data-aos="fade-up">
+  <div class="about-wrapper">
+    
+    <div class="about-text">
+      <h2 class="section-title gradient-text">About Central Advert</h2>
+      <p>
+        Central Advert is a full‑service digital marketing agency focused on helping businesses grow fast using modern online strategies. From small startups to established brands, Central Advert creates custom campaigns across social media, search engines, and websites to bring real customers, not just clicks.
+      </p>
+      <p>
+        The agency combines creative design, data‑driven advertising, and smart branding so clients can stand out online, build trust, and turn views into actual sales. Central Advert was founded by <strong>Fahim Imtiaz Khan</strong>, who leads the team with a vision to make world‑class digital marketing accessible to every business.
+      </p>
+    </div>
+
+    <div class="about-stats">
+      <div class="stat-box">
+        <span class="number">250+</span>
+        <span class="label">Projects delivered</span>
+      </div>
+      <div class="stat-box">
+        <span class="number">120+</span>
+        <span class="label">Happy clients</span>
+      </div>
+      <div class="stat-box">
+        <span class="number">50+</span>
+        <span class="label">Brands built</span>
+      </div>
+      <div class="stat-box">
+        <span class="number">7</span>
+        <span class="label">Experts on the team</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ------------------ SERVICES ------------------ -->
+<section id="services" class="section dark">
+    <h2 class="section-title gradient-text" data-aos="fade-up">Our Services</h2>
+
+    <div class="services-grid">
+        <div class="service-card tilt" data-aos="fade-up" data-aos-delay="100">
+            <h3>SEO Optimization</h3>
+            <p>Rank your website at the top of Google.</p>
+        </div>
+
+        <div class="service-card tilt" data-aos="fade-up" data-aos-delay="200">
+            <h3>Social Media Ads</h3>
+            <p>Grow your business with Facebook, Instagram & TikTok ads.</p>
+        </div>
+
+        <div class="service-card tilt" data-aos="fade-up" data-aos-delay="300">
+            <h3>Graphic & Brand Design</h3>
+            <p>Logos, banners, flyers, and brand kits.</p>
+        </div>
+
+        <div class="service-card tilt" data-aos="fade-up" data-aos-delay="400">
+            <h3>Video Editing</h3>
+            <p>Ads, reels, cinematic edits & animations.</p>
+        </div>
+
+        <div class="service-card tilt" data-aos="fade-up" data-aos-delay="500">
+            <h3>Website Development</h3>
+            <p>Modern websites using HTML, CSS & JS.</p>
+        </div>
+
+        <div class="service-card tilt" data-aos="fade-up" data-aos-delay="600">
+            <h3>Business Consulting</h3>
+            <p>Marketing strategies for fast growth.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ------------------ MEDIA (AUDIO + VIDEO) ------------------ -->
+<section id="media" class="section">
+    <h2 class="section-title gradient-text" data-aos="fade-up">Media Showcase</h2>
+
+    <div class="media-grid">
+        <div class="media-box tilt" data-aos="zoom-in">
+            <h3>🎵 Agency Intro Audio</h3>
+            <audio controls>
+                <source src="media/bg-music.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+
+        <div class="media-box tilt" data-aos="zoom-in">
+            <h3>🎬 Promotional Video</h3>
+            <video controls poster="media/hero-image.jpg">
+                <source src="media/promo-video.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ------------------ PRICING ------------------ -->
+<section id="pricing" class="section" data-aos="fade-up">
+    <h2 class="section-title gradient-text">Pricing Plans</h2>
+
+    <div class="pricing-grid">
+        <div class="price-card tilt" data-aos="fade-right">
+            <h3>Starter</h3>
+            <h1>$99</h1>
+            <ul>
+                <li>Basic SEO</li>
+                <li>3 Social Posts</li>
+                <li>Email Support</li>
+            </ul>
+            <button class="btn glow" onclick="window.location.href='payment.html?plan=starter'">Choose Plan</button>
+            
+        </div>
+
+        <div class="price-card recommended tilt" data-aos="fade-up">
+            <h3>Professional</h3>
+            <h1>$199</h1>
+            <ul>
+                <li>Full SEO Setup</li>
+                <li>10 Social Posts</li>
+                <li>Ad Campaign Setup</li>
+                <li>Priority Support</li>
+            </ul>
+            <button class="btn glow" onclick="window.location.href='payment.html?plan=professional'">Choose Plan</button>
+
+        </div>
+
+        <div class="price-card tilt" data-aos="fade-left">
+            <h3>Enterprise</h3>
+            <h1>$399</h1>
+            <ul>
+                <li>Everything in Pro</li>
+                <li>Full Website</li>
+                <li>Branding Kit</li>
+            </ul>
+            <button class="btn glow" onclick="window.location.href='payment.html?plan=enterprise'">Choose Plan</button>
+
+        </div>
+    </div>
+</section>
+
+<!-- ------------------ TESTIMONIALS ------------------ -->
+<section id="testimonials" class="section dark" data-aos="fade-up">
+  <h2 class="section-title gradient-text">Client Reviews</h2>
+
+  <!-- Trusted by logos row -->
+  <div class="trusted-bar" data-aos="fade-up" data-aos-delay="100">
+    <span class="trusted-label">Trusted by</span>
+    <div class="trusted-logos">
+  <div class="logo-pill">
+    <img src="media/logo-skyline.png" alt="Skyline">
+  </div>
+  <div class="logo-pill">
+    <img src="media/logo-starbucks.png" alt="Starbucks">
+  </div>
+  <div class="logo-pill">
+    <img src="media/logo-mercedes.jpg" alt="Mercedes">
+  </div>
+  <div class="logo-pill">
+    <img src="media/logo-novawear.jpg" alt="NovaWear">
+  </div>
+  <div class="logo-pill">
+    <img src="media/logo-macdonald.jpg" alt="McDonald">
+  </div>
+</div>
+
+  </div>
+
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+
+      <div class="swiper-slide testimonial-box">
+        <p class="review-text">"Amazing agency! They helped us grow fast."</p>
+        <p class="review-meta">E‑commerce brand · <span class="stars">★★★★★</span></p>
+        <h4>- Khan Md Fahim Imtiaz</h4>
+      </div>
+
+      <div class="swiper-slide testimonial-box">
+        <p class="review-text">"Professional and highly creative. Loved working with them!"</p>
+        <p class="review-meta">Creative studio · <span class="stars">★★★★★</span></p>
+        <h4>- Tanjin Sishir</h4>
+      </div>
+
+      <div class="swiper-slide testimonial-box">
+        <p class="review-text">"A complete digital solution for any business."</p>
+        <p class="review-meta">Local service business · <span class="stars">★★★★☆</span></p>
+        <h4>- Afida Hossain</h4>
+      </div>
+
+      <div class="swiper-slide testimonial-box">
+        <p class="review-text">"Truly transformed our online presence. Highly recommend!"</p>
+        <p class="review-meta">B2B SaaS · <span class="stars">★★★★★</span></p>
+        <h4>- Priya Mehta</h4>
+      </div>
+
+      <div class="swiper-slide testimonial-box">
+        <p class="review-text">"Professional, responsive, and delivered beyond expectations."</p>
+        <p class="review-meta">Consulting firm · <span class="stars">★★★★★</span></p>
+        <h4>- James Chen</h4>
+      </div>
+
+      <div class="swiper-slide testimonial-box">
+        <p class="review-text">"Our sales doubled in just three months. Worth every penny!"</p>
+        <p class="review-meta">D2C brand · <span class="stars">★★★★★</span></p>
+        <h4>- Sofia Ramirez</h4>
+      </div>
+
+      <div class="swiper-slide testimonial-box">
+        <p class="review-text">"The team understood our vision perfectly and executed flawlessly."</p>
+        <p class="review-meta">Startup · <span class="stars">★★★★★</span></p>
+        <h4>- Rajiv Kapoor</h4>
+      </div>
+
+      <div class="swiper-slide testimonial-box">
+        <p class="review-text">"From concept to launch, they made it seamless. A game-changer for our business."</p>
+        <p class="review-meta">Retail chain · <span class="stars">★★★★☆</span></p>
+        <h4>- Elena Torres</h4>
+      </div>
+
+    </div>
+
+    <div class="swiper-pagination"></div>
+  </div>
+</section>
+
+
+<!-- ------------------ GALLERY ------------------ -->
+<section id="gallery" class="section">
+    <h2 class="section-title gradient-text" data-aos="fade-up">Gallery</h2>
+
+    <div class="gallery-grid">
+        <img src="media/gallery_boss.jpg" class="tilt">
+        <img src="media/photo_group.jpg" class="tilt">
+        <img src="media/photo_solo.jpg" class="tilt">
+        <img src="media/photo_tour.jpg" class="tilt">
+        <img src="media/gallery1.jpg" class="tilt">
+        <img src="media/gallery2.jpg" class="tilt">
+        <img src="media/gallery3.jpg" class="tilt">
+        <img src="media/gallery4.jpg" class="tilt">
+        <img src="media/gallery5.jpg" class="tilt">
+        <img src="media/gallery6.jpg" class="tilt">
+    </div>
+</section>
+<!-- ------------------ CONTACT ------------------ -->
+<section id="contact" class="section dark">
+    <h2 class="section-title gradient-text" data-aos="fade-up">Contact Us</h2>
+
+    <form id="contactForm" class="contact-form" data-aos="fade-up">
+        <input id="nameField" type="text" placeholder="Your Name" required>
+        <input id="emailField" type="email" placeholder="Your Email" required>
+        <textarea id="msgField" placeholder="Your Message" required></textarea>
+        <button class="btn glow" type="submit">Send Message</button>
+    </form>
+</section>
+
+<!-- ------------------ CANVAS (BOTTOM ANIMATION) ------------------ -->
+<canvas id="agencyCanvas"></canvas>
+
+<!-- ------------------ FOOTER ------------------ -->
+<footer>
+    <div style="text-align:center; padding:24px 0;">
+        © <span id="year"></span> Central Advert — All Rights Reserved.<br>
+        CEO: Md Fahim Imtiaz Khan<br>
+        Contact: <a href="mailto:fahimimtiaz992@gmail.com" style="color:#0ef;">fahimimtiaz992@gmail.com</a>
+    </div>
+</footer>
+
+<!-- NEWSLETTER POPUP -->
+<div id="newsletterPopup" class="newsletter-popup" style="display:none;">
+    <div class="popup-content">
+        <button class="close-btn-small" onclick="closeNewsletter()">×</button>
+        <div class="popup-image">
+            <img src="media/hero2.jpg" alt="Central Advert">
+        </div>
+        <div class="popup-text">
+            <h3>Subscribe to Our Newsletter</h3>
+            <p>Get digital marketing tips, case studies & exclusive offers delivered weekly.</p>
+            <form id="newsletterForm">
+                <input type="email" placeholder="Your Email Address" required>
+                <button type="submit">Subscribe Now →</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Demo Purchase Notification -->
+<div id="demoPopup" class="demo-popup" style="display:none;">
+    <div class="demo-content">
+       <img src="media/plan.jpg" alt="Plan" class="product-icon">
+        <div class="demo-text">
+            <p>Someone in <strong><span id="popupLocation">Dhaka</span></strong> just purchased</p>
+            <h4><span id="popupPlan">Professional Plan</span></h4>
+            <span class="time-ago"><span id="popupTime">2 minutes</span> ago</span>
+        </div>
+        <button class="demo-close" onclick="closeDemoPopup()">×</button>
+    </div>
+</div>
+
+<script>
+    // Set current year automatically
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="script.js"></script>
+<script src="logo.js"></script>
+
+<script>
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('selectstart', event => event.preventDefault());
+</script>
+    <!-- other content, scripts, etc. -->
+        <!-- Elfsight AI Chatbot | Central Advert AI Agent -->
+    <script src="https://elfsightcdn.com/platform.js" async></script>
+    <div class="elfsight-app-480791c3-e47f-4fcb-8462-0520231767ec" data-elfsight-app-lazy></div>
+
+    <!-- <script
+  chatbot_id="695796df7c648a4a37f9aa53"
+  data-type="default"
+  src="https://app.thinkstack.ai/bot/thinkstackai-loader.min.js">
+</script> -->
+
+</body>
+</html>

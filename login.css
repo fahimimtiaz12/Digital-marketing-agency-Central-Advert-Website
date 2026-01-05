@@ -1,0 +1,154 @@
+
+    body {
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #0ef, #a0cfff, #e5a9fa, #4cf, #151515);
+      background-size: 400% 400%;
+      animation: gradientMove 10s ease infinite;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    .auth-card {
+      background: rgba(40,40,60,0.85);
+      border-radius: 22px;
+      box-shadow: 0 10px 35px #0ef7, 0 2px 8px #a0cfff, 0 0 0 2px #fff2 inset;
+      backdrop-filter: blur(16px) saturate(1.3);
+      padding: 50px 40px 30px 40px;
+      max-width: 370px;
+      width: 92vw;
+      animation: fadeInUp 1.1s cubic-bezier(.55,-0.6,.25,1.4);
+      position: relative;
+    }
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(40px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    #logoCanvas {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      border-radius: 8px;
+      opacity: 0.92;
+    }
+    .auth-card h2 {
+      text-align: center;
+      color: #0ef;
+      font-size: 2.1em;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      margin-bottom: 22px;
+      background: linear-gradient(90deg, #0ef, #a0cfff, #4cf);
+      background-clip: text;-webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: glowText 2.4s infinite alternate;
+      margin-top: 60px;
+    }
+    @keyframes glowText {
+      from {text-shadow: 0 0 0 #0ef;}
+      to   {text-shadow: 0 0 26px #a0cfff;}
+    }
+    .input-group {
+      margin-bottom: 22px;
+    }
+    .input-group label {
+      display: block;
+      color: #eee;
+      font-size: 1em;
+      margin-bottom: 6px;
+    }
+    .input-group input {
+      width: 90%;
+      padding: 13px 17px;
+      border: none;
+      border-radius: 9px;
+      background: rgba(85,85,105,0.72);
+      color: #fff;
+      font-size: 1.16em;
+      transition: box-shadow 0.22s;
+      box-shadow: 0 1.5px 6px #0001;
+      outline: none;
+    }
+    .input-group input:focus {
+      box-shadow: 0 0 18px #0ef8, 0 1.5px 12px #fff2;
+      background: rgba(30,30,44,0.87);
+    }
+    
+    .auth-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(90deg,#0ef,#a0cfff,#4cf);
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.15em;
+      color: #151515;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      margin-bottom: 6px;
+      margin-top: 5px;
+      box-shadow: 0 3px 11px #0ef6;
+      transition: background 0.22s, color 0.22s;
+      animation: fadeInBounce 1.7s cubic-bezier(.45,1.8,.51,.86) backwards;
+    }
+    @keyframes fadeInBounce {
+      from {opacity: 0; transform: translateY(-60px) scale(0.88);}
+      70%  {transform: translateY(14px) scale(1.03);}
+      to   {opacity: 1; transform: translateY(0) scale(1);}
+    }
+    .auth-btn:hover {
+      background: linear-gradient(90deg,#4cf,#fff,#0ef);
+      color: #0ef;
+    }
+    .auth-links {
+      text-align: center;
+      margin-top: 14px;
+      animation: fadeInUp 2s cubic-bezier(.55,.1,.35,2.2);
+    }
+    .auth-links a {
+      color: #a0cfff;
+      margin: 0 10px;
+      text-decoration: none;
+      opacity: 0.9;
+      font-size: 1em;
+      transition: color .18s, opacity .18s;
+    }
+    .auth-links a:hover {
+      color: #0ef;
+      opacity: 1;
+      text-decoration: underline;
+    }
+    @media (max-width: 430px) {
+      .auth-card {padding: 22px 8vw;}
+      .input-group label {font-size: 0.94em;}
+      #logoCanvas {width: 150px; height: 42px;}
+    }
+    .password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 40px;
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+ 
